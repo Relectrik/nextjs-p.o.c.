@@ -6,7 +6,8 @@
 
 1. Deploy this project to Vercel, so that we can see live changes in "production".
 2. Show me that your API hello world route actually works, because I don't think it works when under `poc_1/api`. I think it needs to be `src/app/api` (but I could possibly be wrong).
-3. Continue to work on POC1, fetching a list of Sheets for a given user.
+3. Create a Supabase account and create a first project, since we need to get the basic user auth flow working, since we're trying to get the Sheets for a given User.
+4. Continue to work on POC1, fetching a list of Sheets for a given user.
 
 ### Proof of Concepts List
 
