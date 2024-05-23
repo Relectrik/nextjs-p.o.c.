@@ -36,12 +36,12 @@ export default function Home() {
           sys) then reference and call from the front end.
         </p>
       </div>
-      <div className={styles.center}>
+      <div className={styles.default}>
         <button className={styles.card} onClick={() => fetchDataFromAPI()}>
           {" "}
           {loading
             ? "Loading..."
-            : "Check out the console after you click this button."}
+            : "Check the console after you click this button."}
         </button>
       </div>
 
