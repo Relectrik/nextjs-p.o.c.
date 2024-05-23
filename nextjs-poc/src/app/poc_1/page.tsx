@@ -30,9 +30,9 @@ export default function Home() {
       <div className={styles.default}>
         <h2>Proof of Concept 1</h2>
         <p>
-          Let's see if we can demonstrate how to do API/server-side code in
-          NextJS with App Router We're going to store some example data (I just
-          decided to use a random set of weights from Forney's final for cog
+          Let&apos;s see if we can demonstrate how to do API/server-side code in
+          NextJS with App Router We&apos;re going to store some example data (I just
+          decided to use a random set of weights from Forney&apos;s final for cog
           sys) then reference and call from the front end.
         </p>
       </div>
