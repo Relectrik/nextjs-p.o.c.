@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const response = await sheets.spreadsheets.values.get({
-      auth: client,
+      auth: auth,
       spreadsheetId,
       range,
     });
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     } else {
       return NextResponse.json({ message: 'No data found' });
     }
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
