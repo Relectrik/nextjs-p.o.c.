@@ -19,7 +19,10 @@
 # misc
 .DS_Store
 *.pem
-key.json
+o2_key.json
+service_key.json
+.env.local
+.DS_Store
 
 # debug
 npm-debug.log*
