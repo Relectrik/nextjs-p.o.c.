@@ -1,0 +1,39 @@
+{
+  "name": "nextjs-poc",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "clean": "bun pm cache rm && rm -rf .next",
+    "clean:all": "rm -rf node_modules & rm bun.lock* & bun clean",
+    "docs": "typedoc",
+    "test": "jest --testPathPattern=src/.*?.unit.test.ts",
+    "test:int": "jest --testPathPattern=src/.*?.int.test.ts",
+    "test:all": "jest --testPathPattern=src/.*?.test.ts",
+    "tc": "tsc --noEmit",
+    "ci": "bun run test && bun run lint && bun run tc",
+    "supa:login": "npx supabase login",
+    "supa:types": "npx supabase gen types typescript --project-id qbnbwrggbrbnrpwfhtcw --schema public > src/types/supabase.database.types.ts",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@react-oauth/google": "^0.12.1",
+    "@supabase/supabase-js": "^2.43.4",
+    "axios": "^1.7.2",
+    "googleapis": "^137.1.0",
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "typescript": "^5"
+  }
+}
