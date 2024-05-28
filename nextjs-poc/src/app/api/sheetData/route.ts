@@ -11,12 +11,12 @@ interface SheetsValueResponse {
 
 export async function GET(req: NextRequest) {
   const auth = new google.auth.GoogleAuth({
-    keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    keyFile: process.env.NEXT_PUBLIC_GOOGLE_APPLICATION_CREDENTIALS,
     scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
   });
 
   const client = await auth.getClient();
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+  const spreadsheetId = process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID;
   const range = 'MESO 1!A1:D10';
 
   try {
