@@ -26,6 +26,7 @@ o2_key.json
 service_key.json
 .env.local
 .DS_Store
+/nextjs-poc
 
 # debug
 npm-debug.log*

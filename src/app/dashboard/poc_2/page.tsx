@@ -1,6 +1,6 @@
 'use client'
 
-import SheetData from '../../components/SheetData'
+import SheetData from '../../../components/SheetData'
 import { useState } from 'react'
 import styles from '../page.module.css'
 
