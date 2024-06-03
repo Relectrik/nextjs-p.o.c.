@@ -1,8 +1,8 @@
 'use client'
 
-import SheetData from '../../../components/SheetData'
+import SheetData from '@/components/SheetData'
 import { useState } from 'react'
-import styles from '../page.module.css'
+import styles from '@/app/page.module.css'
 
 const space = '\u00A0'
 export default function Home() {
