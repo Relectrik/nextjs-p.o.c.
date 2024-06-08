@@ -108,7 +108,7 @@ export default function Home() {
         height: `${viewportHeight}px`,
       }}
     >
-      <h1 className="font-bold text-3xl">Welcome to ViDoc</h1>
+      <h1 className="font-bold text-3xl">Login to Proof of Concepts Dashboard</h1>
 
       {/* <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleClick}>
         {metadataLoading ? <CircularProgress /> : <Avatar alt={fullName} src={avatarUrl} />}

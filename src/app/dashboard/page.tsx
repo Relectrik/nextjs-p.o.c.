@@ -1,36 +1,67 @@
 'use client'
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-
+import Image from 'next/image'
 import { Avatar, CircularProgress, IconButton } from '@mui/material'
-
-import { supabase } from '@/clients/supabaseClient'
 import { useSupabaseUserMetadata } from '@/hooks/useSupabaseUserMetadata'
 
-export default function Dashboard() {
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/clients/supabaseClient'
+
+import styles from '@/app/page.module.css'
+
+export default function Home() {
   const router = useRouter()
-
   const { avatarUrl, fullName, loading: metadataLoading } = useSupabaseUserMetadata()
-
-  console.log({
-    avatarUrl,
-    fullName,
-    metadataLoading,
-  })
 
   const handleClick = async () => {
     router.push('/')
     await supabase.auth.signOut()
   }
-
   return (
-    <div>
-      <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleClick}>
-        {metadataLoading ? <CircularProgress /> : <Avatar alt={fullName} src={avatarUrl} />}
-      </IconButton>
-      <h1>Hey there, ViDoc Dashboard!</h1>
-      <Link href="/">Click here to go back.</Link>
-    </div>
+    <main className={styles.main}>
+      <div className={styles.description}>
+        <h1>HEY MASAO</h1>
+        <div>
+          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleClick}>
+            {' '}
+            Logout : {metadataLoading ? <CircularProgress /> : <Avatar alt={fullName} src={avatarUrl} />}
+          </IconButton>
+        </div>
+      </div>
+
+      <div className={styles.center}>
+        <Image className={styles.logo} src="/next.svg" alt="Next.js Logo" width={180} height={37} priority />
+      </div>
+
+      <div className={styles.grid}>
+        <a href="poc_1" className={styles.card} rel="noopener noreferrer">
+          <h2>
+            P.O.C. #1 <span>-&gt;</span>
+          </h2>
+          <p>API/Server Side Code in NextJS with App Router</p>
+        </a>
+
+        <a href="poc_2" className={styles.card} rel="noopener noreferrer">
+          <h2>
+            P.O.C. #2 <span>-&gt;</span>
+          </h2>
+          <p>Demo of listing my gym stuff from Google Sheets</p>
+        </a>
+
+        <a href="poc_3" className={styles.card} rel="noopener noreferrer">
+          <h2>
+            P.O.C. #3 <span>-&gt;</span>
+          </h2>
+          <p>Extract the data from the sheets, and (maybe do some processing?) display it.</p>
+        </a>
+
+        <a href="poc_4" className={styles.card} rel="noopener noreferrer">
+          <h2>
+            P.O.C. #4 <span>-&gt;</span>
+          </h2>
+          <p>Connects to Google Translate, and does an example translation.</p>
+        </a>
+      </div>
+    </main>
   )
 }
