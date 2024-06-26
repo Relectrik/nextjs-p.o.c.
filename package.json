@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "bun run dev",
+    "build": "bun run build",
+    "start": "bun start",
     "lint": "eslint .",
     "clean": "bun pm cache rm && rm -rf .next",
     "clean:all": "rm -rf node_modules & rm bun.lock* & bun clean",
