@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "bun run dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "bun start",
     "lint": "eslint .",

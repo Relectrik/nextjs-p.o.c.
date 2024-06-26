@@ -17,7 +17,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const sheets = google.sheets('v4');
     const response = await sheets.spreadsheets.values.get({
       auth: oauth2Client,
-      spreadsheetId: process.env.GOOGLE_SHEET_ID as string,
+      spreadsheetId: process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID as string,
       range: 'MESO 1!D1:D10',
     });
 
