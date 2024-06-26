@@ -1,6 +1,5 @@
 // app/api/auth/google/route.ts
 import { NextResponse } from 'next/server';
-import { google } from 'googleapis';
 import oauth2Client from '@/lib/google'; // Ensure this is correctly set up
 
 export async function GET() {
@@ -10,7 +9,7 @@ export async function GET() {
   ];
 
   const url = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
+    access_type: 'online',
     scope: scopes,
   });
 
