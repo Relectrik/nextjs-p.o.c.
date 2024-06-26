@@ -1,29 +1,29 @@
-// app/api/sheets/route.ts
+// app/api/sheets.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import oauth2Client from '@/lib/google';
+import { parse } from 'cookie';
 
-export async function GET(req: NextRequest) {
-  const accessToken = req.headers.get('Authorization')?.replace('Bearer ', '');
-  if (!accessToken) {
-    return NextResponse.json({ error: 'Missing access token' }, { status: 401 });
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const cookies = parse(req.headers.get('cookie') || '');
+  const tokens = cookies.googleTokens ? JSON.parse(cookies.googleTokens) : null;
+
+  if (!tokens) {
+    return new NextResponse(JSON.stringify({ error: 'Missing authentication tokens' }), { status: 401 });
   }
-  
 
-  oauth2Client.setCredentials({ access_token: accessToken });
-
-  const sheets = google.sheets({ version: 'v4', auth: oauth2Client });
-  try{
+  try {
+    oauth2Client.setCredentials(tokens);
+    const sheets = google.sheets('v4');
     const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: 'Sheet24!A1:A2', // Adjust the range as needed
+      auth: oauth2Client,
+      spreadsheetId: process.env.GOOGLE_SHEET_ID as string,
+      range: 'MESO 1!D1:D10',
     });
-  }
-  catch (error) {
-    return NextResponse.json(error);
-  }
 
-  // const rows = response.data.values;
-  // return NextResponse.json(rows);
-  return NextResponse.json("hi");
+    return new NextResponse(JSON.stringify(response.data.values), { status: 200 });
+  } catch (error) {
+    console.error('Error fetching Google Sheets data:', error);
+    return new NextResponse(JSON.stringify(error), { status: 400 });
+  }
 }
