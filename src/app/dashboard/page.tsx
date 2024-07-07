@@ -9,53 +9,64 @@ import styles from '@/app/page.module.css'
 import { useState, useEffect } from 'react'
 
 interface UserData {
-  range: string;
-  majorDimension: string;
-  values: string[][];
+  id: string
+  name: string
 }
 
 export default function Home() {
   const router = useRouter()
   const { avatarUrl, fullName, loading: metadataLoading } = useSupabaseUserMetadata()
-  const [userData, setUserData] = useState<UserData | null>(null)
+  const [userData, setUserData] = useState<UserData[] | null>(null)
+  const [sheetData, setSheetData] = useState<any | null>(null)
 
   const handleClick = async () => {
     router.push('/')
     await supabase.auth.signOut()
   }
 
-  const handleSignIn = () => {
-    const authWindow = window.open('/api/auth/google', '_blank', 'width=500,height=600')
-
-    const messageListener = async (event: MessageEvent) => {
-      // if (event.origin !== window.location.origin) {
-      //   return // Only accept messages from the same origin
-      // }
-
-      if (event.data.status === 'authenticated') {
-        // Add a delay before fetching data (e.g., 500 milliseconds)
-        setTimeout(async () => {
-          await fetchData();
-        }, 500); // Adjust delay time as needed
-  
-        window.removeEventListener('message', messageListener); // Remove listener after fetching data
-      }
+  const handleSignIn = async () => {
+    const response = await fetch('/api/checkAuth')
+    if (response.status === 200) {
+      await fetchData()
+    } else {
+      window.open('/api/auth/google', '_blank', 'width=500,height=600')
     }
 
-    window.addEventListener('message', messageListener, { once: true })
+    const checkAuth = setInterval(async () => {
+      const cookies = await fetch('/api/checkAuth')
+      if (cookies.ok) {
+        console.log('Auth cookie found, fetching data...')
+        clearInterval(checkAuth)
+        await fetchData()
+      }
+    }, 1000) // Poll every 500 milliseconds
   }
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/sheets')
-      if (!response.ok) {
-        throw new Error('Failed to fetch data')
+      const driveResponse = await fetch('/api/drive')
+      if (!driveResponse.ok) {
+        throw new Error('Failed to fetch drive data')
       }
-      const data: UserData = await response.json()
+      const data: UserData[] = await driveResponse.json()
       console.log('User Data:', data)
       setUserData(data)
     } catch (error) {
       console.error('Error fetching data:', error)
+    }
+  }
+
+  const fetchSheetData = async (sheetId: string) => {
+    try {
+      const sheetsResponse = await fetch(`/api/sheets?sheetId=${sheetId}`)
+      if (!sheetsResponse.ok) {
+        throw new Error('Failed to fetch sheets data')
+      }
+      const data = await sheetsResponse.json()
+      console.log('Sheet Data:', data)
+      setSheetData(data)
+    } catch (error) {
+      console.error('Error fetching sheets data:', error)
     }
   }
 
@@ -66,7 +77,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <h1>HEY MASAO</h1>
+        <h1>Google Sheets Proof of Concept</h1>
         <div>
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleClick}>
             Logout: {metadataLoading ? <CircularProgress /> : <Avatar alt={fullName} src={avatarUrl} />}
@@ -79,16 +90,34 @@ export default function Home() {
       </div>
 
       <div className={styles.grid}>
-        <button onClick={handleSignIn}>Sign in to access your drive!</button>
+        <a className={styles.card} onClick={handleSignIn}>
+          Sign in to access your drive!
+        </a>
+      </div>
+      <div className={styles.main}>
         {userData && (
-        <div className={styles.jsonDisplay}>
-          <h2>Fetched Data:</h2>
-          <pre>{JSON.stringify(userData, null, 0)}</pre>
-        </div>
-      )}
+          <div className={styles.jsonDisplay}>
+            <h2>Fetched Data:</h2>
+            {userData.map(entry => (
+              <>
+                <br />
+                <button className={styles.card} key={entry.id} onClick={() => fetchSheetData(entry.id)}>
+                  {entry.name}
+                </button>
+              </>
+            ))}
+          </div>
+        )}
       </div>
 
-      
+      <div className={styles.grid}>
+        {sheetData && (
+          <div className={styles.jsonDisplay}>
+            <h2>Sheet Data:</h2>
+            <pre>{JSON.stringify(sheetData, null, 2)}</pre>
+          </div>
+        )}
+      </div>
     </main>
   )
 }
