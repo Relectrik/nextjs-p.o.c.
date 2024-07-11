@@ -5,8 +5,8 @@ import oauth2Client from '@/lib/google' // Ensure this is correctly set up
 export async function GET () {
   try {
     const scopes = [
-      'https://www.googleapis.com/auth/spreadsheets.readonly',
-      'https://www.googleapis.com/auth/drive.readonly',
+      'https://www.googleapis.com/auth/spreadsheets',
+      'https://www.googleapis.com/auth/drive',
       // Add any other scopes you need
     ]
 

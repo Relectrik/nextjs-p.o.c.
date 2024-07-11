@@ -18,10 +18,16 @@ export default function Home() {
   const { avatarUrl, fullName, loading: metadataLoading } = useSupabaseUserMetadata()
   const [userData, setUserData] = useState<UserData[] | null>(null)
   const [sheetData, setSheetData] = useState<any | null>(null)
+  const [isSpreadsheetIdUpdated, setIsSpreadsheetIdUpdated] = useState(false)
 
   const handleClick = async () => {
     router.push('/')
     await supabase.auth.signOut()
+  }
+
+  const updateSpreadsheetId = () => {
+    // Logic to update spreadsheetId
+    setIsSpreadsheetIdUpdated(true)
   }
 
   const handleSignIn = async () => {
@@ -64,9 +70,25 @@ export default function Home() {
       }
       const data = await sheetsResponse.json()
       console.log('Sheet Data:', data)
+      updateSpreadsheetId()
       setSheetData(data)
     } catch (error) {
       console.error('Error fetching sheets data:', error)
+    }
+  }
+
+  async function addNewSheet(sheetId: string) {
+    try {
+      const response = await fetch(`/api/modifySheet?sheetId=${sheetId}`, { method: 'POST' })
+      if (response.ok) {
+        // Handle success response
+        console.log(response)
+      } else {
+        // Handle non-success responses
+        console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -95,6 +117,11 @@ export default function Home() {
         </a>
       </div>
       <div className={styles.main}>
+        {isSpreadsheetIdUpdated && (
+          <a onClick={addNewSheet} className={styles.addButton}>
+            Add New Sheet with Hello World!
+          </a>
+        )}
         {userData && (
           <div className={styles.jsonDisplay}>
             <h2>Fetched Data:</h2>
@@ -118,6 +145,7 @@ export default function Home() {
           </div>
         )}
       </div>
+      <div></div>
     </main>
   )
 }
