@@ -16,6 +16,7 @@ interface UserData {
 export default function Home() {
   const router = useRouter()
   const { avatarUrl, fullName, loading: metadataLoading } = useSupabaseUserMetadata()
+  const [currentEntryId, setCurrentEntryId] = useState<string>('default' ?? '');
   const [userData, setUserData] = useState<UserData[] | null>(null)
   const [sheetData, setSheetData] = useState<any | null>(null)
   const [isSpreadsheetIdUpdated, setIsSpreadsheetIdUpdated] = useState(false)
@@ -31,16 +32,16 @@ export default function Home() {
   }
 
   const handleSignIn = async () => {
-    const response = await fetch('/api/checkAuth')
-    if (response.status === 200) {
-      await fetchData()
-    } else {
-      window.open('/api/auth/google', '_blank', 'width=500,height=600')
-    }
-
+    // const response = await fetch('/api/checkAuth')
+    // if (response.status === 200) {
+    //   await fetchData()
+    // } else {
+    //   window.open('/api/auth/google', '_blank', 'width=500,height=600')
+    // }
+    window.open('/api/auth/google', '_blank', 'width=500,height=600')
     const checkAuth = setInterval(async () => {
       const cookies = await fetch('/api/checkAuth')
-      if (cookies.ok) {
+      if (cookies.status == 200) {
         console.log('Auth cookie found, fetching data...')
         clearInterval(checkAuth)
         await fetchData()
@@ -64,6 +65,7 @@ export default function Home() {
 
   const fetchSheetData = async (sheetId: string) => {
     try {
+      setCurrentEntryId(sheetId)
       const sheetsResponse = await fetch(`/api/sheets?sheetId=${sheetId}`)
       if (!sheetsResponse.ok) {
         throw new Error('Failed to fetch sheets data')
@@ -118,7 +120,7 @@ export default function Home() {
       </div>
       <div className={styles.main}>
         {isSpreadsheetIdUpdated && (
-          <a onClick={addNewSheet} className={styles.addButton}>
+          <a onClick={() => addNewSheet(currentEntryId)} className={styles.addButton}>
             Add New Sheet with Hello World!
           </a>
         )}

@@ -24,10 +24,12 @@ export async function POST (req: NextRequest): Promise<NextResponse> {
 
     // Add a new sheet
     const newSheet = doc.addSheet({ title: 'New Sheet' })
-    
-    const sheet = await newSheet
-    const cell = await sheet.getCell(0, 0)
+    const cell = newSheet.getCell(0, 0)
     cell.value = 'Hello World!'
+    
+    // const sheet = await newSheet
+    // const cell = await sheet.getCell(0, 0)
+    // cell.value = 'Hello World!'
 
     return new NextResponse(JSON.stringify({ success: 'New sheet added with "Hello World!"' }), { status: 200 })
   } catch (error) {
