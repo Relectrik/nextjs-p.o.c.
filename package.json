@@ -35,8 +35,11 @@
     "cookie": "^0.6.0",
     "emotion": "^11.0.0",
     "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "google-auth-library": "^9.11.0",
     "google-spreadsheet": "^4.1.2",
     "googleapis": "^137.1.0",
+    "js-cookie": "^3.0.5",
     "net": "^1.0.2",
     "next": "14.2.3",
     "oauth2-client": "^0.0.4",
@@ -44,7 +47,8 @@
     "react-dom": "^18",
     "react-transition-group": "^4.4.5",
     "simple-oauth2": "^5.0.1",
-    "supabase": "^1.172.2"
+    "supabase": "^1.172.2",
+    "tls": "^0.0.1"
   },
   "devDependencies": {
     "@swc/jest": "^0.2.36",

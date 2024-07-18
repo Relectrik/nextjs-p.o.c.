@@ -16,10 +16,11 @@ interface UserData {
 export default function Home() {
   const router = useRouter()
   const { avatarUrl, fullName, loading: metadataLoading } = useSupabaseUserMetadata()
-  const [currentEntryId, setCurrentEntryId] = useState<string>('default' ?? '');
+  const [currentEntryId, setCurrentEntryId] = useState<string>('default' ?? '')
   const [userData, setUserData] = useState<UserData[] | null>(null)
   const [sheetData, setSheetData] = useState<any | null>(null)
   const [isSpreadsheetIdUpdated, setIsSpreadsheetIdUpdated] = useState(false)
+  const [isSignedIn, setIsSignedIn] = useState(false)
 
   const handleClick = async () => {
     router.push('/')
@@ -29,6 +30,11 @@ export default function Home() {
   const updateSpreadsheetId = () => {
     // Logic to update spreadsheetId
     setIsSpreadsheetIdUpdated(true)
+  }
+
+  const updateSignInStatus = () => {
+    // Logic to update sign in status
+    setIsSignedIn(true)
   }
 
   const handleSignIn = async () => {
@@ -47,6 +53,7 @@ export default function Home() {
         await fetchData()
       }
     }, 1000) // Poll every 500 milliseconds
+    updateSignInStatus()
   }
 
   const fetchData = async () => {
@@ -81,8 +88,23 @@ export default function Home() {
 
   async function addNewSheet(sheetId: string) {
     try {
-      const response = await fetch(`/api/modifySheet?sheetId=${sheetId}`, { method: 'POST' })
-      if (response.ok) {
+      const response = fetch(`/api/addSheet?sheetId=${sheetId}`, { method: 'POST' })
+      if (response) {
+        // Handle success response
+        console.log(response)
+      } else {
+        // Handle non-success responses
+        console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function createSpreadsheet() {
+    try {
+      const response = fetch(`/api/createSpreadsheet`, { method: 'POST' })
+      if (response) {
         // Handle success response
         console.log(response)
       } else {
@@ -122,6 +144,11 @@ export default function Home() {
         {isSpreadsheetIdUpdated && (
           <a onClick={() => addNewSheet(currentEntryId)} className={styles.addButton}>
             Add New Sheet with Hello World!
+          </a>
+        )}
+        {isSignedIn && (
+          <a onClick={createSpreadsheet} className={styles.addButton}>
+            Create New Spreadsheet{' '}
           </a>
         )}
         {userData && (

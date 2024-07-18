@@ -20,18 +20,10 @@ export async function POST (req: NextRequest): Promise<NextResponse> {
     // Authenticate and load the spreadsheet
     oauth2Client.setCredentials(tokens)
     const doc = new GoogleSpreadsheet(sheetId, oauth2Client)
-    doc.loadInfo() // loads document properties and worksheets
 
     // Add a new sheet
-    const newSheet = doc.addSheet({ title: 'New Sheet' })
-    const cell = newSheet.getCell(0, 0)
-    cell.value = 'Hello World!'
-    
-    // const sheet = await newSheet
-    // const cell = await sheet.getCell(0, 0)
-    // cell.value = 'Hello World!'
-
-    return new NextResponse(JSON.stringify({ success: 'New sheet added with "Hello World!"' }), { status: 200 })
+    doc.addSheet({ title: 'New Sheet' })
+    return new NextResponse(JSON.stringify({ success: 'New sheet added' }), { status: 200 })
   } catch (error) {
     console.error('Error adding new sheet:', error)
     return new NextResponse(JSON.stringify({ error: 'Failed to add new sheet' }), { status: 500 })
