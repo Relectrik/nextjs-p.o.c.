@@ -51,9 +51,9 @@ export default function Home() {
         console.log('Auth cookie found, fetching data...')
         clearInterval(checkAuth)
         await fetchData()
+        updateSignInStatus()
       }
     }, 1000) // Poll every 500 milliseconds
-    updateSignInStatus()
   }
 
   const fetchData = async () => {
@@ -142,12 +142,12 @@ export default function Home() {
       </div>
       <div className={styles.main}>
         {isSpreadsheetIdUpdated && (
-          <a onClick={() => addNewSheet(currentEntryId)} className={styles.addButton}>
+          <a onClick={() => addNewSheet(currentEntryId)} className={styles.card}>
             Add New Sheet with Hello World!
           </a>
         )}
         {isSignedIn && (
-          <a onClick={createSpreadsheet} className={styles.addButton}>
+          <a onClick={createSpreadsheet} className={styles.card}>
             Create New Spreadsheet{' '}
           </a>
         )}
