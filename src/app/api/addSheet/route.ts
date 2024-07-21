@@ -22,7 +22,13 @@ export async function POST (req: NextRequest): Promise<NextResponse> {
     const doc = new GoogleSpreadsheet(sheetId, oauth2Client)
 
     // Add a new sheet
-    doc.addSheet({ title: 'New Sheet' })
+    const newSheet = doc.addSheet({ title: 'New Sheet' })
+    
+    await ((await newSheet).loadCells('A1:B2'))
+    const cellA1 = (await newSheet).getCell(0, 0);
+    cellA1.value = "Hello World!";
+    await (await newSheet).saveUpdatedCells();
+
     return new NextResponse(JSON.stringify({ success: 'New sheet added' }), { status: 200 })
   } catch (error) {
     console.error('Error adding new sheet:', error)
