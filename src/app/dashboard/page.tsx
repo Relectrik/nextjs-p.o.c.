@@ -6,7 +6,7 @@ import { useSupabaseUserMetadata } from '@/hooks/useSupabaseUserMetadata'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/clients/supabaseClient'
 import styles from '@/app/page.module.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, SetStateAction } from 'react'
 
 interface UserData {
   id: string
@@ -15,6 +15,8 @@ interface UserData {
 
 export default function Home() {
   const router = useRouter()
+  const [selectedOption, setSelectedOption] = useState('')
+  const [isOptionSelected, setIsOptionSelected] = useState(false)
   const { avatarUrl, fullName, loading: metadataLoading } = useSupabaseUserMetadata()
   const [currentEntryId, setCurrentEntryId] = useState<string>('default' ?? '')
   const [userData, setUserData] = useState<UserData[] | null>(null)
@@ -86,9 +88,29 @@ export default function Home() {
     }
   }
 
+  const handleDropdownChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSelectedOption(event.target.value)
+    setIsOptionSelected(true)
+  }
+
   async function addNewSheet(sheetId: string) {
     try {
       const response = fetch(`/api/addSheet?sheetId=${sheetId}`, { method: 'POST' })
+      if (response) {
+        // Handle success response
+        console.log(response)
+      } else {
+        // Handle non-success responses
+        console.log(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function experimentalFunctionality(sheetId: string) {
+    try {
+      const response = fetch(`/api/someSheetFunctionality?sheetId=${sheetId}`, { method: 'POST' })
       if (response) {
         // Handle success response
         console.log(response)
@@ -140,10 +162,15 @@ export default function Home() {
           Sign in to access your drive!
         </a>
       </div>
-      <div className={styles.main}>
+      <div>
         {isSpreadsheetIdUpdated && (
           <a onClick={() => addNewSheet(currentEntryId)} className={styles.card}>
             Add New Sheet with Hello World!
+          </a>
+        )}
+        {isSpreadsheetIdUpdated && (
+          <a onClick={() => experimentalFunctionality(currentEntryId)} className={styles.card}>
+            Example functionality
           </a>
         )}
         {isSignedIn && (
@@ -151,17 +178,23 @@ export default function Home() {
             Create New Spreadsheet{' '}
           </a>
         )}
-        {userData && (
-          <div className={styles.jsonDisplay}>
-            <h2>Fetched Data:</h2>
-            {userData.map(entry => (
-              <>
-                <br />
-                <button className={styles.card} key={entry.id} onClick={() => fetchSheetData(entry.id)}>
+        {isSignedIn && (
+          <div>
+            <select value={selectedOption} onChange={handleDropdownChange}>
+              <option value="" disabled>
+                Select an option
+              </option>
+              {userData.map(entry => (
+                <option key={entry.id} value={entry.id}>
                   {entry.name}
-                </button>
-              </>
-            ))}
+                </option>
+              ))}
+            </select>
+            {isOptionSelected && (
+              <button className={styles.card} onClick={() => fetchSheetData(selectedOption)}>
+                Show sheet data
+              </button>
+            )}
           </div>
         )}
       </div>
