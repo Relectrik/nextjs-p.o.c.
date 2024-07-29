@@ -184,7 +184,7 @@ export default function Home() {
               <option value="" disabled>
                 Select an option
               </option>
-              {userData.map(entry => (
+              {userData && userData.map(entry => (
                 <option key={entry.id} value={entry.id}>
                   {entry.name}
                 </option>
