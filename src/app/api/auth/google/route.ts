@@ -14,7 +14,7 @@ export async function GET () {
       access_type: 'online',
       scope: scopes,
     })
-
+    return NextResponse.json(url)
     return NextResponse.redirect(url)
   } catch (error) {
     console.error('Error fetching Google Sheets data:', error)
