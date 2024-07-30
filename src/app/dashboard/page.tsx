@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/clients/supabaseClient'
 import styles from '@/app/page.module.css'
 import { useState, useEffect, SetStateAction } from 'react'
+import { headers } from 'next/headers'
 
 interface UserData {
   id: string
@@ -40,22 +41,20 @@ export default function Home() {
   }
 
   const handleSignIn = async () => {
-    // const response = await fetch('/api/checkAuth')
-    // if (response.status === 200) {
-    //   await fetchData()
-    // } else {
-    //   window.open('/api/auth/google', '_blank', 'width=500,height=600')
-    // }
-    window.open('/api/auth/google', '_blank', 'width=500,height=600')
+    const urlResponse = await fetch('api/auth/google')
+    if (urlResponse.ok) {
+      const url = await urlResponse.json()
+      window.open(url, '_blank', 'width=500,height=600')
+    }
     const checkAuth = setInterval(async () => {
-      const cookies = await fetch('/api/checkAuth')
-      if (cookies.status == 200) {
+      const drive = await fetch('/api/drive')
+      if (drive.status == 200) {
         console.log('Auth cookie found, fetching data...')
         clearInterval(checkAuth)
         await fetchData()
         updateSignInStatus()
       }
-    }, 1000) // Poll every 500 milliseconds
+    }, 1000)
   }
 
   const fetchData = async () => {
@@ -184,11 +183,12 @@ export default function Home() {
               <option value="" disabled>
                 Select an option
               </option>
-              {userData && userData.map(entry => (
-                <option key={entry.id} value={entry.id}>
-                  {entry.name}
-                </option>
-              ))}
+              {userData &&
+                userData.map(entry => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.name}
+                  </option>
+                ))}
             </select>
             {isOptionSelected && (
               <button className={styles.card} onClick={() => fetchSheetData(selectedOption)}>
