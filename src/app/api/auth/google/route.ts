@@ -1,8 +1,9 @@
 // app/api/auth/google/route.ts
 import { NextResponse } from 'next/server'
 import oauth2Client from '@/lib/google' // Ensure this is correctly set up
+import { redirect } from 'next/navigation'
 
-export async function GET () {
+export async function GET() {
   try {
     const scopes = [
       'https://www.googleapis.com/auth/spreadsheets',
@@ -14,8 +15,7 @@ export async function GET () {
       access_type: 'online',
       scope: scopes,
     })
-    return NextResponse.json(url)
-    return NextResponse.redirect(url)
+    return redirect(url)
   } catch (error) {
     console.error('Error fetching Google Sheets data:', error)
     return new NextResponse(JSON.stringify(error), { status: 400 })
