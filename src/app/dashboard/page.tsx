@@ -160,23 +160,6 @@ export default function Home() {
         <a className={styles.card} onClick={handleSignIn}>
           Sign in to access your drive!
         </a>
-      </div>
-      <div>
-        {isSpreadsheetIdUpdated && (
-          <a onClick={() => addNewSheet(currentEntryId)} className={styles.card}>
-            Add New Sheet with Hello World!
-          </a>
-        )}
-        {isSpreadsheetIdUpdated && (
-          <a onClick={() => experimentalFunctionality(currentEntryId)} className={styles.card}>
-            Example functionality
-          </a>
-        )}
-        {isSignedIn && (
-          <a onClick={createSpreadsheet} className={styles.card}>
-            Create New Spreadsheet{' '}
-          </a>
-        )}
         {isSignedIn && (
           <div>
             <select value={selectedOption} onChange={handleDropdownChange}>
@@ -190,12 +173,29 @@ export default function Home() {
                   </option>
                 ))}
             </select>
-            {isOptionSelected && (
-              <button className={styles.card} onClick={() => fetchSheetData(selectedOption)}>
+          </div>
+        )}
+      </div>
+      {isOptionSelected && (
+              <button onClick={() => fetchSheetData(selectedOption)}>
                 Show sheet data
               </button>
             )}
-          </div>
+      <div className={styles.grid}>
+        {isSpreadsheetIdUpdated && (
+          <a onClick={() => addNewSheet(currentEntryId)} className={styles.card}>
+            Add New Sheet with Hello World!
+          </a>
+        )}
+        {isSpreadsheetIdUpdated && (
+          <a onClick={() => experimentalFunctionality(currentEntryId)} className={styles.card}>
+            Example functionality
+          </a>
+        )}
+        {isSignedIn && (
+          <a onClick={() => createSpreadsheet} className={styles.card}>
+            Create New Spreadsheet{' '}
+          </a>
         )}
       </div>
 
