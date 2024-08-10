@@ -193,7 +193,7 @@ export default function Home() {
           </a>
         )}
         {isSignedIn && (
-          <a onClick={() => createSpreadsheet} className={styles.card}>
+          <a onClick={() => createSpreadsheet()} className={styles.card}>
             Create New Spreadsheet{' '}
           </a>
         )}
